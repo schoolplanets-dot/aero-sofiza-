@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: aerosofiza
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: mkdir -p app && tar -xzf aerosofiza-source.tar.gz -C app && cd app && npm ci --omit=dev
+    startCommand: cd app && node scripts/seed-if-empty.js && node server.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SCALE
+        value: "1"
+      - key: SIM
+        value: "1"
+      - key: TRACK_KEY
+        generateValue: true
